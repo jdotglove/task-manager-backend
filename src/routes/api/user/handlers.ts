@@ -69,6 +69,7 @@ export const getAllUserTasks = async (req: any, res: any) => {
       user: req.params.userId
     });
     if (!foundTasks) {
+      console.log('Task Not Found.');
       res.status(404).json({
         error: true,
         errResponse: 'Tasks Not Found.',
