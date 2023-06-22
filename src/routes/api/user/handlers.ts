@@ -65,13 +65,10 @@ export const deleteUserTask = async (req: any, res: any) => {
 }
 export const getAllUserTasks = async (req: any, res: any) => {
   try {
-    console.log('Req Params: ', req.params);
     const foundTasks = await findTasks({
       user: req.params.userId
     });
-    console.log('Found Tasks: ', foundTasks);
     if (!foundTasks) {
-      console.log('Task Not Found.');
       res.status(404).json({
         error: true,
         errResponse: 'Tasks Not Found.',
