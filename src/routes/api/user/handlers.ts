@@ -9,10 +9,17 @@ import { findOneUserAndUpdate, updateOneUser } from '../../../db/services/user';
 
 export const createUserTask = async (req: any, res: any) => {
   try {
-    console.log('Req: ', req.body);
     const createdTask = await createOneTask({
       ...req.body
     });
+    if (!createdTask) {
+      console.log('Task Not Created.');
+      res.status(404).json({
+        error: true,
+        errorResponse: 'Task Not Created.',
+      }).end();
+      return;
+    }
     const updatedUser = await findOneUserAndUpdate({
       _id: req.params.userId,
     }, {
@@ -22,13 +29,6 @@ export const createUserTask = async (req: any, res: any) => {
     }, {
       new: true,
     });
-    if (!createdTask) {
-      console.log('Task Not Created.');
-      res.status(404).json({
-        error: true,
-        errResponse: 'Task Not Created.',
-      }).end();
-    }
     res.status(200).json({
       data: updatedUser
     }).end();
@@ -36,29 +36,40 @@ export const createUserTask = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errResponse: `Internal Server Error: ${error.message}.`,
+      errorResponse: `Internal Server Error: ${error.message}.`,
     }).end();
   }
   return;
 }
 export const deleteUserTask = async (req: any, res: any) => {
   try {
-    const deletedTask = await deleteOneTask({
-      _id: req.params.taskId
+    const { deletedCount } = await deleteOneTask({
+      _id: req.params.taskId,
     });
-    if (!deletedTask) {
+    const deleted = deletedCount === 1
+    if (!deleted) {
       console.log('Task Not Deleted.');
       res.status(404).json({
         error: true,
-        errResponse: 'Task Not Deleted.',
+        errorResponse: 'Task Not Deleted.',
       }).end();
+      return;
     }
-    res.status(200).json(deletedTask).end();
+    const updatedUser = await findOneUserAndUpdate({
+      _id: req.params.userId
+    }, {
+      $pull: {
+        $tasks: req.params.taskId,
+      },
+    });
+    res.status(200).json({
+      data: updatedUser,
+    }).end();
   } catch (error: any) {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errResponse: `Internal Server Error: ${error.message}.`,
+      errorResponse: `Internal Server Error: ${error.message}.`,
     }).end();
   }
   return;
@@ -72,7 +83,7 @@ export const getAllUserTasks = async (req: any, res: any) => {
       console.log('Task Not Found.');
       res.status(404).json({
         error: true,
-        errResponse: 'Tasks Not Found.',
+        errorResponse: 'Tasks Not Found.',
       }).end();
     }
     res.status(200).json({
@@ -90,6 +101,8 @@ export const getAllUserTasks = async (req: any, res: any) => {
 
 export const updateUserTask = async (req: any, res: any) => {
   try {
+    console.log('Updating Task: ', req.body);
+    console.log('Req Params: ', req.params)
     const updatedTask = await findOneTaskAndUpdate({
       _id: req.params.taskId,
       user: req.params.userId
@@ -97,7 +110,10 @@ export const updateUserTask = async (req: any, res: any) => {
       $set: {
       ...req.body
       }
+    }, {
+      new: true,
     });
+    console.log('Updated Task: ', updatedTask);
     if (!updatedTask) {
       console.log('Task Not Updated.');
       res.status(404).json({
@@ -105,7 +121,9 @@ export const updateUserTask = async (req: any, res: any) => {
         errorResponse: 'Task Not Updated.',
       }).end();
     }
-    res.status(200).json(updatedTask).end();
+    res.status(200).json({ 
+      data: updatedTask,
+    }).end();
   } catch (error: any) {
     console.log(error.message);
     res.status(500).json({

@@ -1,12 +1,13 @@
-import { findOneUserAndUpdate, findOneUser, createOneUser } from '../../../db/services/user';
-import mongoose from '../../../plugins/mongoose';
+import { findOneUser, createOneUser } from '../../../db/services/user';
 
 export const loginHandler = async (req: any, res: any) => {
-  console.log('Here')
   try {
     const user = await findOneUser({
-      username: req.body.username
+      username: req.body.username,
+      password: req.body.password,
     });
+    console.log('Login', req.body);
+    console.log('User: ', user);
     if (!user) {
       console.log('User Not Found.');
       res.status(404).json({
