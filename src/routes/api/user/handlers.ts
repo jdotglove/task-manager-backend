@@ -15,7 +15,7 @@ export const createUserTask = async (req: any, res: any) => {
       console.log('Task Not Created.');
       res.status(404).json({
         error: true,
-        errorResponse: 'Task Not Created.',
+        errorMessage: 'Task Not Created.',
       }).end();
       return;
     }
@@ -35,7 +35,7 @@ export const createUserTask = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errorResponse: `Internal Server Error: ${error.message}.`,
+      errorMessage: `Internal Server Error: ${error.message}.`,
     }).end();
   }
   return;
@@ -50,7 +50,7 @@ export const deleteUserTask = async (req: any, res: any) => {
       console.log('Task Not Deleted.');
       res.status(404).json({
         error: true,
-        errorResponse: 'Task Not Deleted.',
+        errorMessage: 'Task Not Deleted.',
       }).end();
       return;
     }
@@ -68,7 +68,7 @@ export const deleteUserTask = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errorResponse: `Internal Server Error: ${error.message}.`,
+      errorMessage: `Internal Server Error: ${error.message}.`,
     }).end();
   }
   return;
@@ -82,7 +82,7 @@ export const getAllUserTasks = async (req: any, res: any) => {
       console.log('Task Not Found.');
       res.status(404).json({
         error: true,
-        errorResponse: 'Tasks Not Found.',
+        errorMessage: 'Tasks Not Found.',
       }).end();
     }
     res.status(200).json({
@@ -92,7 +92,7 @@ export const getAllUserTasks = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errorResponse: `Internal Server Error: ${error.message}.`,
+      errorMessage: `Internal Server Error: ${error.message}.`,
     }).end();
   }
   return;
@@ -114,7 +114,7 @@ export const updateUserTask = async (req: any, res: any) => {
       console.log('Task Not Updated.');
       res.status(404).json({
         error: true,
-        errorResponse: 'Task Not Updated.',
+        errorMessage: 'Task Not Updated.',
       }).end();
     }
     res.status(200).json({ 
@@ -124,7 +124,7 @@ export const updateUserTask = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errorResponse: `Internal Server Error: ${error.message}.`,
+      errorMessage: `Internal Server Error: ${error.message}.`,
     }).end();
   }
   return;

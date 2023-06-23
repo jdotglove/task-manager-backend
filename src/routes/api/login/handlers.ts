@@ -5,7 +5,7 @@ export const loginHandler = async (req: any, res: any) => {
     if (!(req.body.username && req.body.password)) {
       res.status(400).json({
         error: true,
-        errorResponse: `Missing login credentials ${req.body}.`,
+        errorMessage: `Missing login credentials ${req.body}.`,
       }).end();
       return;
     }
@@ -17,7 +17,7 @@ export const loginHandler = async (req: any, res: any) => {
       console.log('User Not Found.');
       res.status(404).json({
         error: true,
-        errorResponse: 'User Not Found.',
+        errorMessage: 'User Not Found.',
       }).end();
       return;
     }
@@ -33,7 +33,7 @@ export const loginHandler = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errorResponse: 'Internal Server Error.',
+      errorMessage: 'Internal Server Error.',
     }).end();
   }
   return;
@@ -42,7 +42,7 @@ export const signupHandler = async (req: any, res: any) => {
   if (!(req.body.username && req.body.password && req.body.email)) {
     res.status(400).json({
       error: true,
-      errorResponse: `Missing signup credentials ${req.body}.`,
+      errorMessage: `Missing signup credentials ${req.body}.`,
     }).end();
     return;
   }
@@ -54,7 +54,7 @@ export const signupHandler = async (req: any, res: any) => {
       console.log('User Not Created.');
       res.status(404).json({
         error: true,
-        errorResponse: 'User Not Created.',
+        errorMessage: 'User Not Created.',
       }).end();
       return;
     }
@@ -70,7 +70,7 @@ export const signupHandler = async (req: any, res: any) => {
     console.log(error.message);
     res.status(500).json({
       error: true,
-      errorResponse: 'Internal Server Error.',
+      errorMessage: 'Internal Server Error.',
     }).end();
   }
   return;
