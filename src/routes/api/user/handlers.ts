@@ -3,9 +3,8 @@ import {
   deleteOneTask,
   findOneTaskAndUpdate,
   findTasks,
-  updateOneTask
 } from '../../../db/services/task';
-import { findOneUserAndUpdate, updateOneUser } from '../../../db/services/user';
+import { findOneUserAndUpdate } from '../../../db/services/user';
 
 export const createUserTask = async (req: any, res: any) => {
   try {
@@ -101,8 +100,6 @@ export const getAllUserTasks = async (req: any, res: any) => {
 
 export const updateUserTask = async (req: any, res: any) => {
   try {
-    console.log('Updating Task: ', req.body);
-    console.log('Req Params: ', req.params)
     const updatedTask = await findOneTaskAndUpdate({
       _id: req.params.taskId,
       user: req.params.userId
@@ -113,7 +110,6 @@ export const updateUserTask = async (req: any, res: any) => {
     }, {
       new: true,
     });
-    console.log('Updated Task: ', updatedTask);
     if (!updatedTask) {
       console.log('Task Not Updated.');
       res.status(404).json({

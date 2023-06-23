@@ -2,18 +2,24 @@ import { findOneUser, createOneUser } from '../../../db/services/user';
 
 export const loginHandler = async (req: any, res: any) => {
   try {
+    if (!(req.body.username && req.body.password)) {
+      res.status(400).json({
+        error: true,
+        errorResponse: `Missing login credentials ${req.body}.`,
+      }).end();
+      return;
+    }
     const user = await findOneUser({
       username: req.body.username,
       password: req.body.password,
     });
-    console.log('Login', req.body);
-    console.log('User: ', user);
     if (!user) {
       console.log('User Not Found.');
       res.status(404).json({
         error: true,
         errorResponse: 'User Not Found.',
       }).end();
+      return;
     }
     res.status(200).json({
       data: {
@@ -33,7 +39,13 @@ export const loginHandler = async (req: any, res: any) => {
   return;
 }
 export const signupHandler = async (req: any, res: any) => {
-  console.log('SignUp Funnel')
+  if (!(req.body.username && req.body.password && req.body.email)) {
+    res.status(400).json({
+      error: true,
+      errorResponse: `Missing signup credentials ${req.body}.`,
+    }).end();
+    return;
+  }
   try {
     const user = await createOneUser({
       ...req.body,
@@ -44,6 +56,7 @@ export const signupHandler = async (req: any, res: any) => {
         error: true,
         errorResponse: 'User Not Created.',
       }).end();
+      return;
     }
     res.status(200).json({
       data: {
